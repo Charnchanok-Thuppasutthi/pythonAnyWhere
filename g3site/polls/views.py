@@ -44,7 +44,9 @@ def vote(request, question_id):
             'error_message': "You didn't select a choice.",
         })
     else:
-        selected_choice.vote_date.create(date_time=timezone.now())
+        selected_vote = selected_choice.vote_set.get(pk=question_id)
+        selected_vote.vote_date = timezone.now()
+        selected_vote.save()
         selected_choice.votes += 1
         selected_choice.save()
         # Always return an HttpResponseRedirect after successfully dealing
