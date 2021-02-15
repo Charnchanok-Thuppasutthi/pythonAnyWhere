@@ -19,3 +19,9 @@ class Choice(models.Model):
     votes = models.IntegerField(default=0)
     def __str__(self):
         return self.choice_text
+
+class Vote(models.Model):
+    choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
+    vote_date = models.DateTimeField('voted date')
+    def __str__(self):
+        return self.vote_date 
