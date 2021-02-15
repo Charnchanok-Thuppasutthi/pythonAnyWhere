@@ -23,5 +23,5 @@ class Choice(models.Model):
 class Vote(models.Model):
     choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
     vote_date = models.DateTimeField('voted date')
-    #def __str__(self):
-        #return self.vote_date
+    def __str__(self):
+        return str(self.vote_date)
