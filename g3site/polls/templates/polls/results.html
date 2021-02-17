@@ -6,13 +6,19 @@
       </head>
       <body>
         <h1>{{ question.question_text }}</h1>
-
         <ul>
         {% for choice in question.choice_set.all %}
-            <li>{{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
+            <li>{{ choice.choice_text }} -- {{ choice.votes }} vote</li>
         {% endfor %}
         </ul>
 
+        <ul>
+          {% for choice in question.choice_set.all %}
+            {% for vote in choice.vote_set.all %}
+              <li>Voted {{ choice.choice_text }} at-- {{ vote.vote_date }}</li>
+            {% endfor %}
+          {% endfor %}
+        </ul>
         <a href="{% url 'polls:detail' question.id %}">Vote again?</a>
       </body>
 </html>          

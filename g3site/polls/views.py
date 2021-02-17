@@ -44,7 +44,6 @@ def vote(request, question_id):
             'error_message': "You didn't select a choice.",
         })
     else:
-        #selected_vote = selected_choice.vote_set.get(pk=question_id)
         selected_choice.vote_set.create(vote_date=timezone.now())
         selected_choice.votes += 1
         selected_choice.save()
