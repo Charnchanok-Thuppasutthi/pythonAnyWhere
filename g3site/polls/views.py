@@ -44,9 +44,9 @@ def vote(request, question_id):
             'error_message': "You didn't select a choice.",
         })
     else:
-        selected_choice.vote_set.create(vote_date=timezone.now())
-        selected_choice.votes += 1
-        selected_choice.save()
+        selected_choice.vote_set.create(vote_date=timezone.now())#add new one voted time to vote table
+        selected_choice.votes += 1  #increase number of that vote
+        selected_choice.save()  #save modified attribute 
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
