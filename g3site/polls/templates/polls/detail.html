@@ -8,11 +8,9 @@
       <body>
         <h1>{{ question.question_text }}</h1>
 
-          {#แสดง Question text ของ Question นั้นๆ และ Choice ที่มีอยู่ทั้งหมด#}
 
           {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
-          {#เมื่อมีการ action(กดปุ่ม)จะไปดูที่ urls.py แล้วส่งไปที่ตำแหน่งๆนั้น#}
 
           <form action="{% url 'polls:vote' question.id %}" method="post">
           {% csrf_token %}

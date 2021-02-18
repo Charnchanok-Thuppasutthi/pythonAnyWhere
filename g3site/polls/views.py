@@ -9,14 +9,42 @@ class IndexView(generic.ListView):#เมื่อมีการ request path p
     template_name = 'polls/index.html'
     context_object_name = 'latest_question_list'
 
+    def sort(self):
+            sumList = []
+            #ทำloopเพือเรียงจำนวนการvote
+            for i in range(2,Question.objects.count()+2,1): #first pk is 2 so 2 3 4 
+                p = Question.objects.get(pk=i)  #p = Question นั้น
+                choice_all = p.choice_set.all()
+                sumVote=0
+                for j in range( choice_all.count() ):
+                    sumVote += choice_all[j].votes
+                sumList.append(sumVote)
+            #ได้จำนวนการโหวต
+            #นำมาเรียง แล้วอ้างอิงกับ list คำถามเพื่อส่งไปหน้าเว็บ
+            #ติดตรงนี้ การ sort มีปัญหา ลอง Runserver แล้วดู Local Var
+            temp = sumList 
+            temp = temp.sorted(reverse=True)
+            #sumList.sort(reverse=True)
+            sortedQuestion = [] 
+            for k in range(sumList):    
+                for l in range(sumList):
+                    if (sumList[k]==SSumList[l]):
+                        sortedQuestion.append(Question.objects.get(pk=l+2))
+            return sortedQuestion
+            
     def get_queryset(self):
+        
+        QuestionList = self.sort()
         """
         Return the last five published questions (not including those set to be
         published in the future).
         """
-        return Question.objects.filter(
-            pub_date__lte=timezone.now()
-        ).order_by('-pub_date')[:5]
+        return QuestionList
+        #return Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
+        
+    
+        
+    
 
 
 class DetailView(generic.DetailView):#เมื่อมีการ request จากการกด Question จากหน้า index.html จะทำการเปิด detail.html
