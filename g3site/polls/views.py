@@ -5,7 +5,7 @@ from django.views import generic
 from .models import Choice, Question
 from django.utils import timezone
 
-class IndexView(generic.ListView):
+class IndexView(generic.ListView):#เมื่อมีการ request path polls/ จะทำการเรียกหน้า index.html
     template_name = 'polls/index.html'
     context_object_name = 'latest_question_list'
 
@@ -19,7 +19,7 @@ class IndexView(generic.ListView):
         ).order_by('-pub_date')[:5]
 
 
-class DetailView(generic.DetailView):
+class DetailView(generic.DetailView):#เมื่อมีการ request จากการกด Question จากหน้า index.html จะทำการเปิด detail.html
     model = Question
     template_name = 'polls/detail.html'
     def get_queryset(self):
@@ -28,7 +28,7 @@ class DetailView(generic.DetailView):
         """
         return Question.objects.filter(pub_date__lte=timezone.now())
 
-class ResultsView(generic.DetailView):
+class ResultsView(generic.DetailView):#ไปเรียกหน้า result.html ใน templates/polls มาแสดง
     model = Question
     template_name = 'polls/results.html'
 
@@ -44,7 +44,10 @@ def vote(request, question_id):
             'error_message': "You didn't select a choice.",
         })
     else:
-        selected_choice.vote_set.create(vote_date=timezone.now())#add new one voted time to vote table
+        selected_choice.vote_set.create(vote_date=timezone.now())
+        '''
+            add new one voted time to vote table
+        '''
         selected_choice.votes += 1  #increase number of that vote
         selected_choice.save()  #save modified attribute 
         # Always return an HttpResponseRedirect after successfully dealing
