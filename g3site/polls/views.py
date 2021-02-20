@@ -7,7 +7,7 @@ from django.utils import timezone
 
 class IndexView(generic.ListView):#เมื่อมีการ request path polls/ จะทำการเรียกหน้า index.html
     template_name = 'polls/index.html'
-    context_object_name = 'latest_question_list'
+    context_object_name = 'sorted_question_list'
 
     def sort(self):
             sumList = []
@@ -19,33 +19,27 @@ class IndexView(generic.ListView):#เมื่อมีการ request path p
                 for j in range( choice_all.count() ):
                     sumVote += choice_all[j].votes
                 sumList.append(sumVote)
-            #ได้จำนวนการโหวต
-            #นำมาเรียง แล้วอ้างอิงกับ list คำถามเพื่อส่งไปหน้าเว็บ
-            #ติดตรงนี้ การ sort มีปัญหา ลอง Runserver แล้วดู Local Var
-            temp = sumList 
-            temp = temp.sorted(reverse=True)
-            #sumList.sort(reverse=True)
+            temp = list(sumList)#สร้างตัวแปร list ใหม่ list(...) ถ้าไม่ครอบตะเหมือนแบบว่าใช้ list ตัวเดิมแต่เรียกได้จากอีกชื่อ
+            temp.sort(reverse=True)#ตัวแปรตัวใหม่เรียงมาก-น้อย
             sortedQuestion = [] 
-            for k in range(sumList):    
-                for l in range(sumList):
-                    if (sumList[k]==SSumList[l]):
-                        sortedQuestion.append(Question.objects.get(pk=l+2))
+            for i in range(len(temp)): #ตรวจสอบเทียบหาตัวเท่ากันและใส่indexเก่ามาเรียงใหม่
+                for j in range(len(temp)):
+                    if temp[i] == sumList[j]:
+                        sortedQuestion.append(Question.objects.get(pk=j+2))#first pk is 2 3 4 
+                    
             return sortedQuestion
             
     def get_queryset(self):
-        
-        QuestionList = self.sort()
+        try:
+            QuestionList = self.sort()
+        except:Question.objects.count()==0
+            
         """
         Return the last five published questions (not including those set to be
         published in the future).
         """
         return QuestionList
         #return Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
-        
-    
-        
-    
-
 
 class DetailView(generic.DetailView):#เมื่อมีการ request จากการกด Question จากหน้า index.html จะทำการเปิด detail.html
     model = Question

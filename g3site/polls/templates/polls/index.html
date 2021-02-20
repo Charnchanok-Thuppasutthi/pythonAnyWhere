@@ -6,14 +6,15 @@
       </head>
       <body>
         <h1>Poll</h1>
-            {% if latest_question_list %}
-            <h2>Questions</h2>
-            <ul>
-            {% for question in latest_question_list %}
-                <br>
-                <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
-            {% endfor %}
-            </ul>
+            {% if sorted_question_list %}
+                <h2>The Most Voted Questions</h2>
+                <ul>
+                {% for question in sorted_question_list %}
+                    <br>
+                    <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
+                {% endfor %}
+                </ul>
+
         {% else %}
             <p>No polls are available.</p>
         {% endif %}
