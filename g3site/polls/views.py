@@ -32,6 +32,7 @@ class IndexView(generic.ListView):#เมื่อมีการ request path p
             for j in range(len(temp)):
                 if temp[i] == sumList[j]:
                     Sorted_Question.append(Question.objects.get(pk=j+2))#first pk is 2 3 4
+                    break
         return Sorted_Question
             
     def get_queryset(self):
