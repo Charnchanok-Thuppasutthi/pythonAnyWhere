@@ -9,29 +9,34 @@ class IndexView(generic.ListView):#เมื่อมีการ request path p
     template_name = 'polls/index.html'
     context_object_name = 'sorted_question_list'
 
-    def sort(self):
-            sumList = []
-            #ทำloopเพือเรียงจำนวนการvote
-            for i in range(2,Question.objects.count()+2,1): #first pk is 2 so 2 3 4 
-                p = Question.objects.get(pk=i)  #p = Question นั้น
-                choice_all = p.choice_set.all()
-                sumVote=0
-                for j in range( choice_all.count() ):
-                    sumVote += choice_all[j].votes
-                sumList.append(sumVote)
-            temp = list(sumList)#สร้างตัวแปร list ใหม่ list(...) ถ้าไม่ครอบตะเหมือนแบบว่าใช้ list ตัวเดิมแต่เรียกได้จากอีกชื่อ
-            temp.sort(reverse=True)#ตัวแปรตัวใหม่เรียงมาก-น้อย
-            sortedQuestion = [] 
-            for i in range(len(temp)): #ตรวจสอบเทียบหาตัวเท่ากันและใส่indexเก่ามาเรียงใหม่
-                for j in range(len(temp)):
-                    if temp[i] == sumList[j]:
-                        sortedQuestion.append(Question.objects.get(pk=j+2))#first pk is 2 3 4 
-                    
-            return sortedQuestion
+    def get_Vote(self,index):
+        q = Question.objects.get(pk=index+2)
+        choice_all = q.choice_set.all()
+        sumVote=0
+        for j in range( choice_all.count() ):
+            sumVote += choice_all[j].votes
+        return sumVote
+
+    def get_ListVote(self):
+        sumList = []
+        for i in range(Question.objects.count()): 
+            sumList.append(self.get_Vote(i))
+        return sumList
+        
+    def sort_Qusetion(self):
+        Sorted_Question = []
+        sumList = self.get_ListVote()
+        temp = list(sumList)
+        temp.sort(reverse=True)
+        for i in range(len(temp)): #ตรวจสอบเทียบหาตัวเท่ากันและใส่indexเก่ามาเรียงใหม่
+            for j in range(len(temp)):
+                if temp[i] == sumList[j]:
+                    Sorted_Question.append(Question.objects.get(pk=j+2))#first pk is 2 3 4
+        return Sorted_Question
             
     def get_queryset(self):
         try:
-            QuestionList = self.sort()
+            QuestionList = self.sort_Qusetion()
         except:Question.objects.count()==0
             
         """
