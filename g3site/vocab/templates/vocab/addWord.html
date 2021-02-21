@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>My add Word page</title>
+      </head>
+      <body>
+        <h1>Add Word</h1>
+        <form action="{% url 'vocab:submit' %}" method="post">
+            {% csrf_token %}  
+            <label>Word:</label> 
+            <input type="text" name="word"><br>
+            <label>Mean:</label> 
+            <input type="text" name="mean"><br>
+            <label>Type:</label> 
+            <input type="text" name="type"><br>
+            <input value="Submit"type="submit">
+        </form>
+      </body>
+</html>          
+
