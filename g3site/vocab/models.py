@@ -12,11 +12,12 @@ class Word(models.Model):
         return self.add_date
     
 class Mean(models.Model):
-    mean_word = models.CharField(max_length=200)
+    mean_text = models.CharField(max_length=200)
+    type_text = models.CharField(max_length=10)
     word = models.ForeignKey(Word, on_delete=models.CASCADE)
     add_date = models.DateTimeField('date vocab added')
     def __str__(self):
-        return self.mean_word
+        return self.mean_text
         
     def add_date(self):
         return self.add_date
