@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>My Mean page</title>
+      </head>
+      <body>
+        <h1>{{word.word_text}}</h1>
+        {% for mean in word.mean_set.all %}
+          <p>{{ mean }} ({{mean.type_text}})<p> 
+        {% endfor %}
+      </body>
+</html>          
