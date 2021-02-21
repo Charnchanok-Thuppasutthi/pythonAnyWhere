@@ -1,3 +1,22 @@
+import datetime
 from django.db import models
+from django.utils import timezone
 
-# Create your models here.
+class Word(models.Model):
+    word_text = models.CharField(max_length=50)
+    add_date = models.DateTimeField('date vocab added')
+    def __str__(self):
+        return self.word_text
+
+    def add_date(self):
+        return self.add_date
+    
+class Mean(models.Model):
+    mean_word = models.CharField(max_length=200)
+    word = models.ForeignKey(Word, on_delete=models.CASCADE)
+    add_date = models.DateTimeField('date vocab added')
+    def __str__(self):
+        return self.mean_word
+        
+    def add_date(self):
+        return self.add_date

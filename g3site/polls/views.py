@@ -9,8 +9,8 @@ class IndexView(generic.ListView):#เมื่อมีการ request path p
     template_name = 'polls/index.html'
     context_object_name = 'sorted_question_list'
 
-    def get_Vote(self,index):
-        q = Question.objects.get(pk=index+2)
+    def get_Vote(self,index):#นับจำนวน vote ของ question ตัวนั้น
+        q = Question.objects.get(pk=index+2) #pk 1 ลบไปแล้วเวลาสร้าง question ใหม่มันเริ่มตัวต่อไปเลย
         choice_all = q.choice_set.all()
         sumVote=0
         for j in range( choice_all.count() ):
@@ -20,7 +20,7 @@ class IndexView(generic.ListView):#เมื่อมีการ request path p
     def get_ListVote(self):
         sumList = []
         for i in range(Question.objects.count()): 
-            sumList.append(self.get_Vote(i))
+            sumList.append(self.get_Vote(i)) 
         return sumList
         
     def sort_Qusetion(self):
@@ -31,7 +31,9 @@ class IndexView(generic.ListView):#เมื่อมีการ request path p
         for i in range(len(temp)): #ตรวจสอบเทียบหาตัวเท่ากันและใส่indexเก่ามาเรียงใหม่
             for j in range(len(temp)):
                 if temp[i] == sumList[j]:
+                    print(sumList[j])
                     Sorted_Question.append(Question.objects.get(pk=j+2))#first pk is 2 3 4
+                    print(Sorted_Question)
                     break
         return Sorted_Question
             
