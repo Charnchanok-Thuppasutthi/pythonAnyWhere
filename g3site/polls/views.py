@@ -10,7 +10,7 @@ class IndexView(generic.ListView):#เมื่อมีการ request path p
     context_object_name = 'sorted_question_list'
 
     def get_Vote(self,index):#นับจำนวน vote ของ question ตัวนั้น
-        q = Question.objects.get(pk=index+2) #pk 1 ลบไปแล้วเวลาสร้าง question ใหม่มันเริ่มตัวต่อไปเลย
+        q = Question.objects.get(pk=index+1)
         choice_all = q.choice_set.all()
         sumVote=0
         for j in range( choice_all.count() ):
@@ -32,7 +32,7 @@ class IndexView(generic.ListView):#เมื่อมีการ request path p
             for j in range(len(temp)):
                 if temp[i] == sumList[j]:
                     print(sumList[j])
-                    Sorted_Question.append(Question.objects.get(pk=j+2))#first pk is 2 3 4
+                    Sorted_Question.append(Question.objects.get(pk=j+1))
                     print(Sorted_Question)
                     break
         return Sorted_Question
