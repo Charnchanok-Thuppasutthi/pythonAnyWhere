@@ -7,7 +7,8 @@
       <body>
         <h1>{{word.word_text}}</h1>
         {% for mean in word.mean_set.all %}
-          <p>{{ mean }} ({{mean.type_text}})<p> 
+          <h3>ความหมาย</h3>
+          <p>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{{ mean }} ({{mean.type_text}})<p> 
         {% endfor %}
       </body>
       <input type=button value="Previous Page" onClick="javascript:history.go(-1);">
