@@ -27,6 +27,7 @@ def submit(request):
     text = request.POST.get("type")
     newWord = Word(word_text = word)
     newWord.save()
+    print(text)
     newWord.mean_set.create( mean_text = mean , type_text = text)
     newWord.save()
 

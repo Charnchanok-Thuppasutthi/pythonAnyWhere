@@ -12,10 +12,20 @@
             <input type="text" name="word"><br>
             <label>Mean:</label> 
             <input type="text" name="mean"><br>
-            <label>Type:</label> 
-            <input type="text" name="type"><br>
+            <label>Select Type:</label> 
+              <select id="wordType" name='type' >
+                <option value="Noun">Noun</option>
+                <option value="Pronoun">Pronoun</option>
+                <option value="Verb">Verb</option>
+                <option value="Adjective">Adjective</option>
+                <option value="Adverb">Adverb</option>
+                <option value="Conjunction">Conjunction</option>
+                <option value="Interjection">Interjection</option>
+              </select>
+              <br>
             <input value="Submit"type="submit">
         </form>
+        <input type=button value="Previous Page" onClick="javascript:history.go(-1);">
       </body>
 </html>          
 
