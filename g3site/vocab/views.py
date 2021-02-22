@@ -25,10 +25,13 @@ def submit(request):
     word = request.POST.get("word")
     mean = request.POST.get("mean")
     text = request.POST.get("type")
-    newWord = Word(word_text = word)
-    newWord.save()
-    print(text)
-    newWord.mean_set.create( mean_text = mean , type_text = text)
-    newWord.save()
+    if (word or mean or text == ""):
+        newWord = Word(word_text = word)
+        newWord.save()
+        newWord.mean_set.create( mean_text = mean , type_text = text)
+        newWord.save()
+    else:
+        return render(request, 'vocab/addWord.html', {
+             'error_message': "ข้อมูลไม่ครบ.",})
 
     return render(request , 'vocab/addWord.html' )

@@ -6,6 +6,7 @@
       </head>
       <body>
         <h1>Add Word</h1>
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
         <form action="{% url 'vocab:submit' %}" method="post">
             {% csrf_token %}  
             <label>Word:</label> 
