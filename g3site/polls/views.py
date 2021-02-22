@@ -63,6 +63,9 @@ class ResultsView(generic.DetailView):#ไปเรียกหน้า result.
     template_name = 'polls/results.html'
 
 
+def menu(request):
+    return render(request, 'polls/homepage.html')
+
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     try:
