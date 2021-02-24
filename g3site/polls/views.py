@@ -9,45 +9,8 @@ class IndexView(generic.ListView):#เมื่อมีการ request path p
     template_name = 'polls/index.html'
     context_object_name = 'sorted_question_list'
 
-    def get_Vote(self,index):#นับจำนวน vote ของ question ตัวนั้น
-        q = Question.objects.get(pk=index+1)
-        choice_all = q.choice_set.all()
-        sumVote=0
-        for j in range( choice_all.count() ):
-            sumVote += choice_all[j].votes
-        return sumVote
-
-    def get_ListVote(self):
-        sumList = []
-        for i in range(Question.objects.count()): 
-            sumList.append(self.get_Vote(i)) 
-        return sumList
-        
-    def sort_Qusetion(self):
-        Sorted_Question = []
-        sumList = self.get_ListVote()
-        temp = list(sumList)
-        temp.sort(reverse=True)
-        for i in range(len(temp)): #ตรวจสอบเทียบหาตัวเท่ากันและใส่indexเก่ามาเรียงใหม่
-            for j in range(len(temp)):
-                if temp[i] == sumList[j]:
-                    print(sumList[j])
-                    Sorted_Question.append(Question.objects.get(pk=j+1))
-                    print(Sorted_Question)
-                    break
-        return Sorted_Question
-            
     def get_queryset(self):
-        try:
-            QuestionList = self.sort_Qusetion()
-        except:Question.objects.count()==0
-            
-        """
-        Return the last five published questions (not including those set to be
-        published in the future).
-        """
-        return QuestionList
-        #return Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
+        return Question.objects.all().order_by('-allVote')
 
 class DetailView(generic.DetailView):#เมื่อมีการ request จากการกด Question จากหน้า index.html จะทำการเปิด detail.html
     model = Question
@@ -61,7 +24,6 @@ class DetailView(generic.DetailView):#เมื่อมีการ request จ
 class ResultsView(generic.DetailView):#ไปเรียกหน้า result.html ใน templates/polls มาแสดง
     model = Question
     template_name = 'polls/results.html'
-
 
 def menu(request):
     return render(request, 'polls/homepage.html')
@@ -78,12 +40,54 @@ def vote(request, question_id):
         })
     else:
         selected_choice.vote_set.create(vote_date=timezone.now())
-        '''
-            add new one voted time to vote table
-        '''
+        question.allVote +=1
+        question.lastVote = timezone.now()
+        question.save()
         selected_choice.votes += 1  #increase number of that vote
+        selected_choice.lastVote = timezone.now()
         selected_choice.save()  #save modified attribute 
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+
+def sortingQuestion(request ):
+
+    request_type = request.POST.get("inputVoteMax")
+    request_type2 = request.POST.get("inputDateLast")
+    request_type3 = request.POST.get("inputVoteMin")
+    request_type4 = request.POST.get("inputDateFirst")
+
+    if (request_type == "Sort By MaxVote"):
+            context = {'sorted_question_list': Question.objects.all().order_by('-allVote')}
+            return render(request , "polls/index.html" , context) 
+    elif (request_type3 == "Sort By MinVote"):
+        context = {'sorted_question_list': Question.objects.all().order_by('allVote')}
+        return render(request , "polls/index.html" , context) 
+
+    elif (request_type2 == "Sort By LastVote"):
+                context = {'sorted_question_list': Question.objects.all().order_by('-lastVote') }
+                return render(request , "polls/index.html" ,context)
+    elif (request_type4 == 'Sort By FirstDate'):
+                context = {'sorted_question_list': Question.objects.all().order_by('lastVote') }
+                return render(request , "polls/index.html" ,context)
+
+def sortingVote(request ,question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    selected_choice = question.choice_set.get(pk=request.POST['choice'])
+
+    request_type = request.POST.get("inputVoteMax")
+    request_type2 = request.POST.get("inputDateLast")
+    request_type3 = request.POST.get("inputVoteMin")
+    request_type4 = request.POST.get("inputDateFirst")
+
+    if (request_type == "Sort By MaxVote"):
+            context = {'sorted_question_list': selected_choice.objects.all().order_by('-votes')}
+            return render(request , "polls/result.html" , context) 
+    elif (request_type3 == "Sort By MinVote"):
+        context = {'sorted_question_list': selected_choice.objects.all().order_by('votes')}
+        return render(request , "polls/result.html" , context) 
+
+    elif (request_type2 == "Sort By LastVote"):
+                context = {'sorted_question_list': selected_choice.objects.all().order_by('-lastVote') }
+                return render(request , "polls/result.html" ,context)
+    elif (request_type4 == 'Sort By FirstDate'):
+                context = {'sorted_question_list': selected_choice.objects.all().order_by('lastVote') }
+                return render(request , "polls/result.html" ,context)
