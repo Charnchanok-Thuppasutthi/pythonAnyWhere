@@ -18,8 +18,7 @@
         {% else %}
             <p>No polls are available.</p>
         {% endif %}
-         <form action="{% url 'polls:sortQ'%}" method="post"> 
-            {% csrf_token %}
+         <form action="{% url 'polls:sortQ'%}" method="GET"> 
             <input value="Sort By MaxVote" type="submit" name="inputVoteMax">
             <input value="Sort By LastVote" type="submit" name="inputDateLast">
             <br>

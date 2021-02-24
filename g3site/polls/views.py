@@ -46,15 +46,15 @@ def vote(request, question_id):
         selected_choice.votes += 1  #increase number of that vote
         selected_choice.lastVote = timezone.now()
         selected_choice.save()  #save modified attribute 
-        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+        return render(request , 'polls/results.html', {'question': question ,'choice_all': question.choice_set.all()} )
 
 def sortingQuestion(request ):
 
-    request_type = request.POST.get("inputVoteMax")
-    request_type2 = request.POST.get("inputDateLast")
-    request_type3 = request.POST.get("inputVoteMin")
-    request_type4 = request.POST.get("inputDateFirst")
-
+    request_type = request.GET.get("inputVoteMax")
+    request_type2 = request.GET.get("inputDateLast")
+    request_type3 = request.GET.get("inputVoteMin")
+    request_type4 = request.GET.get("inputDateFirst")
+    
     if (request_type == "Sort By MaxVote"):
             context = {'sorted_question_list': Question.objects.all().order_by('-allVote')}
             return render(request , "polls/index.html" , context) 
@@ -71,23 +71,22 @@ def sortingQuestion(request ):
 
 def sortingVote(request ,question_id):
     question = get_object_or_404(Question, pk=question_id)
-    selected_choice = question.choice_set.get(pk=request.POST['choice'])
 
-    request_type = request.POST.get("inputVoteMax")
-    request_type2 = request.POST.get("inputDateLast")
-    request_type3 = request.POST.get("inputVoteMin")
-    request_type4 = request.POST.get("inputDateFirst")
+    request_type = request.GET.get("inputVoteMax")
+    request_type2 = request.GET.get("inputDateLast")
+    request_type3 = request.GET.get("inputVoteMin")
+    request_type4 = request.GET.get("inputDateFirst")
 
     if (request_type == "Sort By MaxVote"):
-            context = {'sorted_question_list': selected_choice.objects.all().order_by('-votes')}
-            return render(request , "polls/result.html" , context) 
+        context = {'question': question ,'choice_all': question.choice_set.all().order_by('-votes')}
+        return render(request , "polls/results.html" , context) 
     elif (request_type3 == "Sort By MinVote"):
-        context = {'sorted_question_list': selected_choice.objects.all().order_by('votes')}
-        return render(request , "polls/result.html" , context) 
+        context = {'question': question ,'choice_all': question.choice_set.all().order_by('votes')}
+        return render(request , "polls/results.html" , context) 
 
     elif (request_type2 == "Sort By LastVote"):
-                context = {'sorted_question_list': selected_choice.objects.all().order_by('-lastVote') }
-                return render(request , "polls/result.html" ,context)
+        context = {'question': question ,'choice_all': question.choice_set.all().order_by('-lastVote') }
+        return render(request , "polls/results.html" ,context)
     elif (request_type4 == 'Sort By FirstDate'):
-                context = {'sorted_question_list': selected_choice.objects.all().order_by('lastVote') }
-                return render(request , "polls/result.html" ,context)
+        context = {'question': question ,'choice_all': question.choice_set.all().order_by('lastVote') }
+        return render(request , "polls/results.html" ,context)
