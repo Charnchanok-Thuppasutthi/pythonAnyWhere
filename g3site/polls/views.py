@@ -55,17 +55,17 @@ def sortingQuestion(request ):
     request_type3 = request.GET.get("inputVoteMin")
     request_type4 = request.GET.get("inputDateFirst")
     
-    if (request_type == "Sort By MaxVote"):
+    if (request_type == "Sort By MostVote"):
             context = {'sorted_question_list': Question.objects.all().order_by('-allVote')}
             return render(request , "polls/index.html" , context) 
-    elif (request_type3 == "Sort By MinVote"):
+    elif (request_type3 == "Sort By LeastVote"):
         context = {'sorted_question_list': Question.objects.all().order_by('allVote')}
         return render(request , "polls/index.html" , context) 
 
-    elif (request_type2 == "Sort By LastVote"):
+    elif (request_type2 == "Sort By LastVoteDate"):
                 context = {'sorted_question_list': Question.objects.all().order_by('-lastVote') }
                 return render(request , "polls/index.html" ,context)
-    elif (request_type4 == 'Sort By FirstDate'):
+    elif (request_type4 == 'Sort By EarlyVoteDate'):
                 context = {'sorted_question_list': Question.objects.all().order_by('lastVote') }
                 return render(request , "polls/index.html" ,context)
 
@@ -77,16 +77,16 @@ def sortingVote(request ,question_id):
     request_type3 = request.GET.get("inputVoteMin")
     request_type4 = request.GET.get("inputDateFirst")
 
-    if (request_type == "Sort By MaxVote"):
+    if (request_type == "Sort By MostVote"):
         context = {'question': question ,'choice_all': question.choice_set.all().order_by('-votes')}
         return render(request , "polls/results.html" , context) 
-    elif (request_type3 == "Sort By MinVote"):
+    elif (request_type3 == "Sort By LeastVote"):
         context = {'question': question ,'choice_all': question.choice_set.all().order_by('votes')}
         return render(request , "polls/results.html" , context) 
 
-    elif (request_type2 == "Sort By LastVote"):
+    elif (request_type2 == "Sort By LastVoteDate"):
         context = {'question': question ,'choice_all': question.choice_set.all().order_by('-lastVote') }
         return render(request , "polls/results.html" ,context)
-    elif (request_type4 == 'Sort By FirstDate'):
+    elif (request_type4 == 'Sort By EarlyVoteDate'):
         context = {'question': question ,'choice_all': question.choice_set.all().order_by('lastVote') }
         return render(request , "polls/results.html" ,context)
